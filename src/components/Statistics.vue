@@ -3,7 +3,7 @@
     <div class="col-md-4">
       <div class="card p-3 text-center">
         <h5>Total Students</h5>
-        <h2 class="text-primary">120</h2>
+        <h2 class="text-primary">{{ studentsCount }}</h2>
       </div>
     </div>
 
@@ -23,4 +23,13 @@
     </div>
   </div>
 </template>
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+let studentsCount = ref(0);
+
+const totalStudents = JSON.parse(localStorage.getItem("students")) || [];
+
+for (let index = 0; index < totalStudents.length; index++) {
+    studentsCount.value++
+}
+</script>

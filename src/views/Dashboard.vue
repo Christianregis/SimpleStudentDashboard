@@ -3,7 +3,7 @@
   <div class="content">
     <Header />
     <Statistics />
-    <AverageComponent/>
+    <AverageComponent />
   </div>
 </template>
 <script setup>

@@ -86,10 +86,9 @@ import Header from "@/components/Header.vue";
 import Slidebar from "@/components/slidebar.vue";
 import { onMounted, ref } from "vue";
 
-
 // Etat de soumittion du formulaire (initial, success, error)
 let state = ref("");
-let students = ref([]);
+
 
 // Le state au lancement de la page est initial
 onMounted(() => {
@@ -112,17 +111,30 @@ const submitForm = (event) => {
     gender.value.trim() != "" &&
     id.value.trim() != ""
   ) {
-    // Ajout des elements dans la liste des eleves
-    students.value.push({
+
+    //Mise a jour du state (Operation reussi !)
+    state.value = "success";
+
+    //Utilisation du localStorage pour la sauvgarde des eleves
+    const students = JSON.parse(localStorage.getItem('students')) || [];
+
+    students.push({
       firstName: firstName.value,
       lastName: lastName.value,
       year: year.value,
       gender: gender.value,
       id: id.value,
     });
-    //Mise a jour du state (Operation reussi !)
-    state.value = "success";
+
+    localStorage.setItem('students', JSON.stringify(students))
+
+    firstName.value = "";
+    lastName.value = "";
+    year.value = 0;
+    gender.value = "";
+    id.value = "";
     console.log("Done");
+
   } else {
     // Les champs ne sont pas tous remplis (Error)
     state.value = "error";
