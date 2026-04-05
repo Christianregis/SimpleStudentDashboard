@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="student in studentsSubjects">
+        <tr v-for="student in studentsAverages" :key="student.id">
           <td>{{ student.name }}</td>
           <td>{{ student.average }}</td>
           <td>
@@ -25,7 +25,7 @@
               >Tres bien</span
             >
             <span
-              v-else-if="student.average > 11.99 && student.average <= 14"
+              v-else-if="student.average > 11.99 && student.average <= 14.99"
               class="badge bg-primary badge-custom"
               >Assez bien</span
             >
@@ -41,36 +41,40 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { computed } from "vue";
 
 const students = JSON.parse(localStorage.getItem("students")) || [];
 const subjects = JSON.parse(localStorage.getItem("subjects")) || [];
 
 // Cette liste va contenir le nom de l'eleves et sa moyenne correspondante
-let studentsSubjects = ref([]);
+const studentsAverages = computed(() => {
+  return students.map(student => {
+    let totalScore = 0;
+    let lengthCoefficient = 0;
 
-// On parcoure la liste d'eleves et pour on verifie si l'identifiant id_student su sujet correspond a id de l'eleve ( Si oui, on determine la moyenne de cette eleve)
-for (let i = 0; i < students.length; i++) {
-  const studentSubjects = {
-    name: "",
-    average: 0,
-  };
+    subjects.forEach(subject => {
+      if (subject.student_id == student.id) {
+        totalScore += subject.score * subject.coefficient;
+        lengthCoefficient += subject.coefficient;
+      }
+    });
 
-  let totalScore = 0;
-  let lengthCoefficient = 0;
+    return {
+      name: student.firstName,
+      average: totalScore / lengthCoefficient || 0,
+    };
+  });
+});
 
-  studentSubjects.name = students[i].firstName;
-  for (let index = 0; index < subjects.length; index++) {
-    if (subjects[index].student_id == students[i].id) {
-      totalScore = totalScore + subjects[index].score * subjects[index].coefficient;
-      lengthCoefficient = lengthCoefficient + subjects[index].coefficient;
-      //   studentSubjects.subjects.push(subjects[index].score * subjects[index].coefficient);
-    }
-  }
-  studentSubjects.average = totalScore / lengthCoefficient || 0;
 
-  studentsSubjects.value.push(studentSubjects);
-}
+// Passage de la constante generalAverage au composant Statictics
 
-console.log(studentsSubjects.value);
+const emit = defineEmits(['generalAverage'])
+let totalAverage = 0;
+studentsAverages.value.map(student=>{
+    totalAverage = totalAverage + student.average
+});
+const generalAverage = totalAverage/studentsAverages.value.length;
+
+emit('generalAverage', generalAverage);
 </script>

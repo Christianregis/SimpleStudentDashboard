@@ -10,7 +10,7 @@
     <div class="col-md-4">
       <div class="card p-3 text-center">
         <h5>Average Class Score</h5>
-        <h2 class="text-success">13.5 / 20</h2>
+        <h2 class="text-success">{{ generalAverage }} / 20</h2>
       </div>
     </div>
 
@@ -30,6 +30,10 @@ let studentsCount = ref(0);
 const totalStudents = JSON.parse(localStorage.getItem("students")) || [];
 
 for (let index = 0; index < totalStudents.length; index++) {
-    studentsCount.value++
+  studentsCount.value++;
 }
+
+defineProps({
+  generalAverage: Number,
+});
 </script>
