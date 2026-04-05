@@ -17,8 +17,8 @@
     <div class="col-md-4">
       <div class="card p-3 text-center">
         <h5>Best Student</h5>
-        <h6 class="text-dark">Jean Dupont</h6>
-        <span class="text-primary">17.8 / 20</span>
+        <h6 class="text-dark">{{ bestStudent.name }}</h6>
+        <span class="text-primary">{{ bestStudent.average }} / 20</span>
       </div>
     </div>
   </div>
@@ -35,5 +35,7 @@ for (let index = 0; index < totalStudents.length; index++) {
 
 defineProps({
   generalAverage: Number,
+  bestStudent: Object,
 });
+
 </script>

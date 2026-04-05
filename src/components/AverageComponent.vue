@@ -69,12 +69,30 @@ const studentsAverages = computed(() => {
 
 // Passage de la constante generalAverage au composant Statictics
 
-const emit = defineEmits(['generalAverage'])
+const emit = defineEmits(['general-average','best-student'])
+
 let totalAverage = 0;
 studentsAverages.value.map(student=>{
-    totalAverage = totalAverage + student.average
+    totalAverage = totalAverage + student.average;
 });
 const generalAverage = totalAverage/studentsAverages.value.length;
+console.log("General Average ",generalAverage)
 
-emit('generalAverage', generalAverage);
+
+// Trie de la liste contenant les noms et des eleves ainsi que leurs moyennes ( On recupera plus tard la premiere valeure )
+const bestStudents = studentsAverages.value.toSorted((a,b)=>{
+    if(a.average > b.average){
+        return -1;
+    }else if(a.average < b.average){
+        return 1;
+    }else{
+        return 0;
+    }
+});
+
+// Recuperation de la premiere valeur de la liste de noms d'eleves et moyennes
+const best_student = bestStudents[0];
+
+emit('general-average', generalAverage);
+emit('best-student', best_student);
 </script>
